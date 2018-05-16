@@ -1,6 +1,6 @@
 import inquirer from 'inquirer'
 
-import gameReducer, {move} from './game'
+import gameReducer, {move, winner} from './game'
 import {createStore} from 'redux'
 
 const printBoard = () => {
@@ -14,7 +14,7 @@ const printBoard = () => {
 }
 
 const getInput = player => async () => {
-  const {turn} = game.getState()  
+  const {turn} = game.getState()
   if (turn !== player) return
   const ans = await inquirer.prompt([{
     type: 'input',
@@ -30,6 +30,13 @@ const game = createStore(gameReducer)
 
 // Debug: Print the state
 // game.subscribe(() => console.log(game.getState()))
+
+game.subscribe(() => {
+  // process.stdout.write(winner(game.getState().board, move.player))
+  const blah = winner(game.getState().board, game.getState().turn , game.getState().count)
+  process.stdout.write(blah)
+})
+
 
 game.subscribe(printBoard)
 game.subscribe(getInput('X'))
